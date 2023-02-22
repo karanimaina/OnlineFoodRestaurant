@@ -2,6 +2,8 @@ package com.arcurus.organisationlist.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,20 +16,17 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "restaurant")
+@SQLDelete(sql="UPDATE restaurant SET soft_delete=true where id=?")
+@Where(clause = "soft_delete = false")
 @Builder
-public  class Restaurant  {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public  class Restaurant extends BaseEntity {
     @Column(unique = true)
     private String name;
     private String location;
-    @ManyToMany
-    @JoinTable(name = "restaurant_menu",
-            joinColumns = @JoinColumn(name = "restaurant_id"),
-            inverseJoinColumns = @JoinColumn(name = "menu_id"))
-    private List<Menus> menus = new ArrayList<>();
-    @ManyToMany
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<Menus> menus;
+    @ManyToMany //manytoone
     @JoinTable(name = "restaurant_review",
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id"))

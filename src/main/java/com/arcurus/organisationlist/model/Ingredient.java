@@ -1,24 +1,27 @@
 package com.arcurus.organisationlist.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Ingredient {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+@Table(name = "ingredient")
+@SQLDelete(sql="UPDATE image SET soft_delete=true where id=?")
+@Where(clause = "soft_delete = false")
+@Builder
+public class Ingredient  extends BaseEntity {
+    @Column(unique = true)
     private String name;
     @ManyToMany(mappedBy = "ingredient")
-    private List<Menus>menus = new ArrayList<>();
+    private Set<Menus> menus = new HashSet<>();
 }

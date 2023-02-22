@@ -1,12 +1,15 @@
 package com.arcurus.organisationlist.service;
 
-import com.arcurus.organisationlist.model.Ingredient;
-import com.arcurus.organisationlist.model.Restaurant;
+import com.arcurus.organisationlist.model.Images;
 import com.arcurus.organisationlist.wrappers.*;
-import reactor.core.publisher.Flux;
+import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
-public interface RestaurantService {
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+
+public interface RestaurantService  {
     Mono<UniversalResponse> addRestaurant(RestaurantWrapper restaurant);
 
     Mono<UniversalResponse> addContacts(ContactWrapper contactWrapper, String name);
@@ -17,36 +20,33 @@ public interface RestaurantService {
 
     Mono<UniversalResponse> getRestaurantsByFoodPrice(int price);
 
-    Mono<UniversalResponse> getRestaurantsByRating(int rating);
+    Mono<UniversalResponse> getRestaurantsByRating(long res);
 
     Mono<UniversalResponse> getRestaurantsByReviews(long restId);
 
     //     menu
     Mono<UniversalResponse> addMenu(MenuWrapper menuWrapper);
-    Mono<UniversalResponse>addIngredients(long menuId, IngredientWrapper ingredientWrapper);
+    Mono<UniversalResponse> addIngredientsToMenu(String menuName, List<IngredientWrapper>ingredientWrappers);
+    Mono<UniversalResponse>editMenuIngredients(String menuName,List<IngredientWrapper>ingredients);
 
     Mono<UniversalResponse> editMenu(MenuWrapper menuWrapper);
 
-    Mono<UniversalResponse> deleteMenu();
+    Mono<UniversalResponse> deleteMenu(String name);
+    Mono<UniversalResponse>addMenuToRestaurants(String menuName,String restaurant);
 
-    Mono<UniversalResponse> readMenu();
+    Mono<UniversalResponse> readMenu( String restaurantName);
 
     //     contact
-    Mono<UniversalResponse> addContacts(ContactWrapper contactWrapper);
 
-    Mono<UniversalResponse> editContacts(ContactWrapper contactWrapper, long restaurantId);
-
+    Mono<UniversalResponse> editContacts(ContactWrapper contactWrapper, String restaurantname);
     Mono<UniversalResponse> deleteContact(long contactId);
 
     Mono<UniversalResponse> readContacts(long restaurantId);
 
     //     Ingredient
-    Mono<UniversalResponse> addIngredients(IngredientWrapper ingredientWrapper);
 
-    Mono<UniversalResponse> editIngredient(IngredientWrapper ingredientWrapper);
+    Mono<UniversalResponse> deleteIngredientFromMenu(long menuId,String ingredientName) ;
 
-    Mono<UniversalResponse> deleteIngredient(long id);
-
-    Mono<UniversalResponse> getIngredient(long menuId);
+      Set<Images> uploadImage(MultipartFile[]  multipartFiles) throws IOException;
 
 }

@@ -1,20 +1,22 @@
 package com.arcurus.organisationlist.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Images {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Lob
-    private MultipartFile foodImage;
+@Builder
+@Table(name = "image")
+@SQLDelete(sql="UPDATE image SET soft_delete=true where id=?")
+@Where(clause = "soft_delete = false")
+public class Images  extends BaseEntity{
+    private String name;
+    private String type;
+    @Column(length = 500000)
+    private byte[] bytes;
 }

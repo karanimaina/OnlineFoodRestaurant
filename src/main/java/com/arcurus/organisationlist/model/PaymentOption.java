@@ -4,12 +4,17 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "payment")
+@SQLDelete(sql="UPDATE payment SET soft_delete=true where id=?")
+@Where(clause = "soft_delete = false")
 @Builder
 public class PaymentOption {
     @Id

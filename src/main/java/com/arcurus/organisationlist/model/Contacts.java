@@ -2,19 +2,20 @@ package com.arcurus.organisationlist.model;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Null;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
+@Table(name = "contacts")
+@SQLDelete(sql="UPDATE contacts SET soft_delete=true where id=?")
+@Where(clause = "soft_delete = false")
 @Setter
-public class Contacts {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Contacts extends BaseEntity{
     @Column(unique = true)
     private String name;
 

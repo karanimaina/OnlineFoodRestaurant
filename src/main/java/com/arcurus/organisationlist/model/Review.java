@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,12 +18,12 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Review {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+@Table(name = "review")
+@SQLDelete(sql="UPDATE review SET soft_delete=true where id=?")
+@Where(clause = "soft_delete = false")
+public class Review extends BaseEntity {
     private  String review;
     private int rating;
-    @ManyToMany(mappedBy = "reviews")
+    @ManyToMany(mappedBy = "reviews")//onetomany
     private Set<Restaurant> restaurant= new HashSet<>();
 }
